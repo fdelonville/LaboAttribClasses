@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthDTO register(RegisterForm form) {
-        Person person = form.toEntity();
+        Person person = form.toPerson();
         person.setPassword( passwordEncoder.encode(form.getPassword()) );
         person = personRepository.save( person );
 

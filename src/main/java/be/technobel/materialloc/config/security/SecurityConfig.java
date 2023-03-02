@@ -36,6 +36,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/request/new" ).hasAnyRole("STUDENT", "TEACHER")
                         .requestMatchers("/request/**").hasRole("ADMIN")
+                        .requestMatchers("/registration/**").hasRole("ADMIN")
                         .requestMatchers("/register").anonymous()
                         .requestMatchers("/login").anonymous()
 

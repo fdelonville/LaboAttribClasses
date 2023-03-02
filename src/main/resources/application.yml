@@ -34,3 +34,4 @@ logging:
         - STUDENT
         - ADMIN
         - TEACHER
+        - PENDING
