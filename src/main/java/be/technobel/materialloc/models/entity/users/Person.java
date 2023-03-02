@@ -32,4 +32,6 @@ public class Person extends BaseEntity<Long> {
     private String phone;
     private Address address;
 
+    private boolean enabled;
+
 }
