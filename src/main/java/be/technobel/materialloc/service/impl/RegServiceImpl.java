@@ -2,14 +2,19 @@ package be.technobel.materialloc.service.impl;
 
 import be.technobel.materialloc.exceptions.NotFoundException;
 import be.technobel.materialloc.models.dto.PersonDTO;
+import be.technobel.materialloc.models.entity.users.Admin;
 import be.technobel.materialloc.models.entity.users.Person;
+import be.technobel.materialloc.models.entity.users.Student;
+import be.technobel.materialloc.models.entity.users.Teacher;
 import be.technobel.materialloc.models.form.RegisterForm;
 import be.technobel.materialloc.repository.PersonRepository;
 import be.technobel.materialloc.service.RegService;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class RegServiceImpl implements RegService {
 
     private final PersonRepository personRepository;
@@ -20,10 +25,10 @@ public class RegServiceImpl implements RegService {
 
     @Override
     public void approve(Long id) {
-        Person person = personRepository.findById(id).orElseThrow();
+        Student student = (Student)personRepository.findById(id).orElseThrow();
 
-        person.setRole("STUDENT");
-        personRepository.save(person);
+        student.setRole("STUDENT");
+        personRepository.save(student);
     }
 
     @Override
@@ -47,11 +52,13 @@ public class RegServiceImpl implements RegService {
 
     @Override
     public void insertTeacher(RegisterForm form) {
-
+        Teacher teacher = form.toTeacher();
+        personRepository.save(teacher);
     }
 
     @Override
     public void insertAdmin(RegisterForm form) {
-
+        Admin admin = form.toAdmin();
+        personRepository.save(admin);
     }
 }
