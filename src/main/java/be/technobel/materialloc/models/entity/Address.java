@@ -11,19 +11,19 @@ import java.io.Serializable;
 @Getter @Setter
 public class Address implements Serializable {
 
-    @Column(name = "address_street", nullable = false)
+    @Column(name = "address_street")
     private String street;
-    @Column(name = "address_number", nullable = false)
+    @Column(name = "address_number")
     private int number;
     @Column(name = "address_box_number")
     private String boxNumber;
-    @Column(name = "address_postal_code", nullable = false)
+    @Column(name = "address_postal_code")
     private int postalCode;
-    @Column(name = "address_city", nullable = false)
+    @Column(name = "address_city")
     private String city;
-    @Column(name = "address_country", nullable = false)
+    @Column(name = "address_country")
     private String country;
-    @Column(name = "address_region", nullable = false)
+    @Column(name = "address_region")
     private String region;
 
 }

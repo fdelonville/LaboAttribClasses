@@ -31,7 +31,7 @@ public class RequestController {
         this.roomService = roomService;
     }
 
-    @GetMapping("/new")
+    @GetMapping("/all")
     public List<MaterialDTO> displayAllRequests(){
         return materialService.getAll();
     }

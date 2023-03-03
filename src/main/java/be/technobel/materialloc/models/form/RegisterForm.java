@@ -1,9 +1,6 @@
 package be.technobel.materialloc.models.form;
 
-import be.technobel.materialloc.models.entity.users.Admin;
-import be.technobel.materialloc.models.entity.users.Person;
-import be.technobel.materialloc.models.entity.users.Student;
-import be.technobel.materialloc.models.entity.users.Teacher;
+import be.technobel.materialloc.models.entity.users.*;
 import lombok.Data;
 
 @Data
@@ -14,15 +11,16 @@ public class RegisterForm {
 
     private String email;
 
-    public Person toPerson(){
-        Person person = new Person();
+    public PendingStudent toPending(){
+        PendingStudent pendingStudent = new PendingStudent();
 
-        person.setLogin(login);
-        person.setPassword(password);
-        person.setEmail(email);
-        person.setRole("PENDING");
+        pendingStudent.setLogin(login);
+        pendingStudent.setPassword(password);
+        pendingStudent.setEmail(email);
+        pendingStudent.setRole("PENDING");
+        pendingStudent.setEnabled(true);
 
-        return person;
+        return pendingStudent;
     }
 
     public Teacher toTeacher(){

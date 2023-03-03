@@ -1,6 +1,7 @@
 package be.technobel.materialloc.service.impl;
 
 import be.technobel.materialloc.models.dto.AuthDTO;
+import be.technobel.materialloc.models.entity.users.PendingStudent;
 import be.technobel.materialloc.models.entity.users.Person;
 import be.technobel.materialloc.models.form.LoginForm;
 import be.technobel.materialloc.models.form.RegisterForm;
@@ -47,16 +48,17 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthDTO register(RegisterForm form) {
-        Person person = form.toPerson();
-        person.setPassword( passwordEncoder.encode(form.getPassword()) );
-        person = personRepository.save( person );
+        PendingStudent pending = form.toPending();
+        pending.setPassword( passwordEncoder.encode(form.getPassword()) );
+        pending.setRole("PENDING");
+        pending = personRepository.save( pending );
 
-        String token = jwtProvider.generateToken(person.getLogin(), person.getRole());
+        String token = jwtProvider.generateToken(pending.getLogin(), pending.getRole());
 
         return AuthDTO.builder()
                 .token(token)
-                .username(person.getLogin())
-                .role(person.getRole())
+                .username(pending.getLogin())
+                .role(pending.getRole())
                 .build();
     }
 }

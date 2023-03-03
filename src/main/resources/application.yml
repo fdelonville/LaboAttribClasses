@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/materialloc_db
     username: postgres
-    password: Test1234=
+    password: test1234=
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -35,3 +35,7 @@ logging:
         - ADMIN
         - TEACHER
         - PENDING
+
+springdoc:
+    swagger-ui:
+      path: /swagger
