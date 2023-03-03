@@ -6,12 +6,14 @@ import be.technobel.materialloc.models.dto.ReducedRequestDTO;
 import be.technobel.materialloc.models.dto.RequestDTO;
 import be.technobel.materialloc.models.entity.Request;
 import be.technobel.materialloc.models.entity.RequestStatus;
+import be.technobel.materialloc.models.entity.Room;
 import be.technobel.materialloc.models.entity.Status;
 import be.technobel.materialloc.models.entity.users.Person;
 import be.technobel.materialloc.models.form.RequestForm;
 import be.technobel.materialloc.repository.MaterialRepository;
 import be.technobel.materialloc.repository.PersonRepository;
 import be.technobel.materialloc.repository.RequestRepository;
+import be.technobel.materialloc.repository.RoomRepository;
 import be.technobel.materialloc.service.RequestService;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +29,13 @@ public class RequestServiceImpl implements RequestService {
     private final MaterialRepository materialRepository;
     private final PersonRepository personRepository;
 
-    public RequestServiceImpl(RequestRepository requestRepository, MaterialRepository materialRepository, PersonRepository personRepository) {
+    private final RoomRepository roomRepository;
+
+    public RequestServiceImpl(RequestRepository requestRepository, MaterialRepository materialRepository, PersonRepository personRepository, RoomRepository roomRepository) {
         this.requestRepository = requestRepository;
         this.materialRepository = materialRepository;
         this.personRepository = personRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -121,6 +126,18 @@ public class RequestServiceImpl implements RequestService {
         status.setStatus(RequestStatus.RELOCATING);
 
         request.getStatusHistory().add(status);
+        requestRepository.save(request);
+    }
+
+    @Override
+    public void acceptRequest(Long requestId, Long roomId) {
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException(Request.class, requestId));
+
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new NotFoundException(Room.class, roomId));
+
+        request.setRoom(room);
+
         requestRepository.save(request);
     }
 

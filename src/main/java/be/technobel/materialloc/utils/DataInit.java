@@ -35,6 +35,8 @@ public class DataInit implements InitializingBean {
         Student student = new Student();
         student.setLogin("student");
         student.setPassword(passwordEncoder.encode("pass"));
+        student.setFirstName("Aaaa");
+        student.setLastName("Aaaa");
         student.setEnabled(true);
 
         Teacher teacher = new Teacher();

@@ -58,18 +58,23 @@ public class RequestController {
         return requestService.getRequestDetails(id);
     }
 
-    @GetMapping("/{id:[0-9]+}/accept")
-    public List<RoomDTO> displayAcceptForm(@PathVariable long id){
+    @GetMapping("/{id:[0-9]+}/available-rooms")
+    public List<RoomDTO> displayAvailableRooms(@PathVariable long id){
         return roomService.findCompatibleRoomsForRequest(id);
     }
 
+    @PatchMapping("/{id:[0-9]+}/accept")
+    public void assignRoom(@PathVariable long id, @RequestParam long roomId){
+
+    }
+
     @PatchMapping("/{id:[0-9]+}/refuse")
-    public void processRefusalForm( @PathVariable long id, @RequestParam String justification ){
+    public void refuse( @PathVariable long id, @RequestParam String justification ){
         requestService.refuseRequest(id, justification);
     }
 
     @PatchMapping("/{id:[0-9]+}/relocate")
-    public void processRelocateForm( @PathVariable long id, @RequestParam String justification ){
+    public void relocate( @PathVariable long id, @RequestParam String justification ){
         requestService.relocateRequest(id, justification);
     }
 
