@@ -2,10 +2,7 @@ package be.technobel.materialloc.service.impl;
 
 import be.technobel.materialloc.exceptions.NotFoundException;
 import be.technobel.materialloc.models.dto.PersonDTO;
-import be.technobel.materialloc.models.entity.users.Admin;
-import be.technobel.materialloc.models.entity.users.Person;
-import be.technobel.materialloc.models.entity.users.Student;
-import be.technobel.materialloc.models.entity.users.Teacher;
+import be.technobel.materialloc.models.entity.users.*;
 import be.technobel.materialloc.models.form.RegisterForm;
 import be.technobel.materialloc.repository.PersonRepository;
 import be.technobel.materialloc.service.RegService;
@@ -25,9 +22,17 @@ public class RegServiceImpl implements RegService {
 
     @Override
     public void approve(Long id) {
-        Student student = (Student)personRepository.findById(id).orElseThrow();
+        Person person = personRepository.findById(id).orElseThrow();
+        Student student = new Student();
 
+        student.setPassword(person.getPassword());
+        student.setFirstName(person.getFirstName());
+        student.setLogin(person.getLogin());
+        student.setLastName(person.getLastName());
+        student.setEmail(person.getEmail());
+        student.setAddress(person.getAddress());
         student.setRole("STUDENT");
+        personRepository.delete(person);
         personRepository.save(student);
     }
 

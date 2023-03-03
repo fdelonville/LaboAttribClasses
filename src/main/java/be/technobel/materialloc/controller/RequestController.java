@@ -10,6 +10,7 @@ import be.technobel.materialloc.service.MaterialService;
 import be.technobel.materialloc.service.RequestService;
 import be.technobel.materialloc.service.RoomService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,12 +33,13 @@ public class RequestController {
     }
 
     @GetMapping("/all")
-    public List<MaterialDTO> displayAllRequests(){
-        return materialService.getAll();
+    public List<ReducedRequestDTO> displayAllRequests(){
+        return requestService.getFutureWithStatus(RequestStatus.PENDING);
     }
 
     @PostMapping("/new")
-    public void processRequestForm(@RequestBody @Valid RequestForm form){
+    public void processRequestForm(@RequestBody @Valid RequestForm form, Authentication auth){
+        form.setUserLogin( (String)auth.getPrincipal() );
         requestService.create(form);
     }
 

@@ -1,5 +1,6 @@
 package be.technobel.materialloc.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
@@ -17,6 +18,7 @@ public abstract class BaseEntity<TID> {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @Column(name = "last_modified_at", insertable = false)
     private LocalDateTime lastModifiedAt;
 

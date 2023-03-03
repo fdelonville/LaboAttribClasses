@@ -6,6 +6,7 @@ import be.technobel.materialloc.models.entity.Status;
 import be.technobel.materialloc.validation.constraints.MaxTime;
 import be.technobel.materialloc.validation.constraints.MinFuture;
 import be.technobel.materialloc.validation.constraints.MinTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

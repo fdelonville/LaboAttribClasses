@@ -10,6 +10,10 @@ public class RegisterForm {
     private String password;
 
     private String email;
+    
+    private String firstName;
+    
+    private String lastName;
 
     public PendingStudent toPending(){
         PendingStudent pendingStudent = new PendingStudent();
@@ -19,6 +23,8 @@ public class RegisterForm {
         pendingStudent.setEmail(email);
         pendingStudent.setRole("PENDING");
         pendingStudent.setEnabled(true);
+        pendingStudent.setFirstName(firstName);
+        pendingStudent.setLastName(lastName);
 
         return pendingStudent;
     }
@@ -29,6 +35,9 @@ public class RegisterForm {
         teacher.setLogin(login);
         teacher.setPassword(password);
         teacher.setEmail(email);
+        teacher.setEnabled(true);
+        teacher.setFirstName(firstName);
+        teacher.setLastName(lastName);
 
         return teacher;
     }
@@ -39,6 +48,9 @@ public class RegisterForm {
         admin.setLogin(login);
         admin.setPassword(password);
         admin.setEmail(email);
+        admin.setEnabled(true);
+        admin.setFirstName(firstName);
+        admin.setLastName(lastName);
 
         return admin;
     }
