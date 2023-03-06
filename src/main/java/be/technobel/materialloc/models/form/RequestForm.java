@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 public class RequestForm {
 
-    @NotBlank
+
     private String userLogin;
     @NotBlank
     private String justification;

@@ -18,6 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
+*.yml
+*.sql
 
 ### NetBeans ###
 /nbproject/private/
@@ -28,6 +30,7 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+!**/src/main/java/be.technobel.materialloc/utils/DataInit
 
 ### VS Code ###
 .vscode/

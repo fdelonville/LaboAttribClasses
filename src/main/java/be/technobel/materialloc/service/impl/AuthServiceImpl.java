@@ -50,7 +50,6 @@ public class AuthServiceImpl implements AuthService {
     public AuthDTO register(RegisterForm form) {
         PendingStudent pending = form.toPending();
         pending.setPassword( passwordEncoder.encode(form.getPassword()) );
-        pending.setRole("PENDING");
         pending = personRepository.save( pending );
 
         String token = jwtProvider.generateToken(pending.getLogin(), pending.getRole());
