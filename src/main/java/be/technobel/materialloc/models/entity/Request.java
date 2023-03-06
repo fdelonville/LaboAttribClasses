@@ -40,8 +40,9 @@ public class Request extends BaseEntity<Long> {
     @Column(name = "additional_notes")
     private String additionalNotes;
 
-    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
-    private Set<Status> statusHistory = new LinkedHashSet<>();
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
 
     @ManyToMany
     private Set<Material> materials = new LinkedHashSet<>();
@@ -51,6 +52,7 @@ public class Request extends BaseEntity<Long> {
     private Person madeBy;
 
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room room;
 
 }

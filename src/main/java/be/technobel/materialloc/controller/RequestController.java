@@ -65,7 +65,7 @@ public class RequestController {
 
     @PatchMapping("/{id:[0-9]+}/accept")
     public void assignRoom(@PathVariable long id, @RequestParam long roomId){
-
+        requestService.acceptRequest(id, roomId);
     }
 
     @PatchMapping("/{id:[0-9]+}/refuse")

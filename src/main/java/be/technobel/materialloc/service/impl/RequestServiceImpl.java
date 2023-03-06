@@ -7,17 +7,11 @@ import be.technobel.materialloc.models.dto.RequestDTO;
 import be.technobel.materialloc.models.entity.Request;
 import be.technobel.materialloc.models.entity.RequestStatus;
 import be.technobel.materialloc.models.entity.Room;
-import be.technobel.materialloc.models.entity.Status;
 import be.technobel.materialloc.models.entity.users.Person;
 import be.technobel.materialloc.models.form.RequestForm;
-import be.technobel.materialloc.repository.MaterialRepository;
-import be.technobel.materialloc.repository.PersonRepository;
-import be.technobel.materialloc.repository.RequestRepository;
-import be.technobel.materialloc.repository.RoomRepository;
+import be.technobel.materialloc.repository.*;
 import be.technobel.materialloc.service.RequestService;
 import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -57,20 +51,14 @@ public class RequestServiceImpl implements RequestService {
                 new LinkedHashSet<>(materialRepository.findAllById(form.getMaterialIds()))
         );
 
-        // generate SENT status
-        Status status = new Status();
-        status.setRequest(request);
-        status.setJustification("REQUEST SENT");
-        status.setStatus(RequestStatus.PENDING);
-
-        request.getStatusHistory().add(status);
+        request.setStatus(RequestStatus.PENDING);
 
         requestRepository.save( request );
     }
 
     @Override
     public List<ReducedRequestDTO> getFutureWithStatus(RequestStatus status){
-        return requestRepository.findFutureWithCurrentStatus(status).stream()
+        return requestRepository.findFutureWithStatus(status).stream()
                 .map( ReducedRequestDTO::toDto )
                 .toList();
     }
@@ -87,24 +75,14 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Request.class, id));
 
-        Status currentStatus = request.getStatusHistory().stream()
-                .max(Comparator.comparing(Status::getCreatedAt))
-                .orElse(null);
-
-
         if(
-                currentStatus != null &&
-                currentStatus.getStatus() != RequestStatus.PENDING &&
-                currentStatus.getStatus() != RequestStatus.RELOCATING
+                request.getStatus() != RequestStatus.PENDING &&
+                request.getStatus() != RequestStatus.RELOCATING
         )
             throw new RequestStatusException();
 
-        Status status = new Status();
-        status.setJustification(justification != null ? justification : "NO JUSTIFICATION");
-        status.setRequest(request);
-        status.setStatus(RequestStatus.REFUSED);
+        request.setStatus(RequestStatus.REFUSED);
 
-        request.getStatusHistory().add(status);
         requestRepository.save(request);
     }
 
@@ -113,19 +91,11 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Request.class, id));
 
-        Status currentStatus = request.getStatusHistory().stream()
-                .max(Comparator.comparing(Status::getCreatedAt))
-                .orElse(null);
-
-        if( currentStatus != null && currentStatus.getStatus() != RequestStatus.ACCEPTED )
+        if( request.getStatus() != RequestStatus.ACCEPTED )
             throw new RequestStatusException();
 
-        Status status = new Status();
-        status.setJustification(justification != null ? justification : "NO JUSTIFICATION");
-        status.setRequest(request);
-        status.setStatus(RequestStatus.RELOCATING);
+        request.setStatus(RequestStatus.RELOCATING);
 
-        request.getStatusHistory().add(status);
         requestRepository.save(request);
     }
 
@@ -136,9 +106,18 @@ public class RequestServiceImpl implements RequestService {
 
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new NotFoundException(Room.class, roomId));
 
-        request.setRoom(room);
+        if(request.getNeededCapacity() <= room.getCapacity()
+                && (request.getMadeBy().getRole().equals("TEACHER") || room.isStudentAccess())) {
+            request.setRoom(room);
 
-        requestRepository.save(request);
+            request.setStatus(RequestStatus.ACCEPTED);
+
+            requestRepository.save(request);
+        }
+
+        else throw new RuntimeException("Invalid choice: room cannot be attributed with specified request parameters");
+
+
     }
 
 

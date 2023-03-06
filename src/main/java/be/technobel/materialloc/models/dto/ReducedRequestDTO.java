@@ -2,14 +2,12 @@ package be.technobel.materialloc.models.dto;
 
 import be.technobel.materialloc.models.entity.Request;
 import be.technobel.materialloc.models.entity.RequestStatus;
-import be.technobel.materialloc.models.entity.Status;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
-import java.util.Set;
 
 @Data
 public class ReducedRequestDTO implements Serializable {
@@ -34,10 +32,7 @@ public class ReducedRequestDTO implements Serializable {
                 entity.getBeginTime(),
                 entity.getEndTime(),
                 entity.getNeededCapacity(),
-                entity.getStatusHistory().stream()
-                        .max(Comparator.comparing(Status::getCreatedAt))
-                        .map(Status::getStatus)
-                        .orElse(null),
+                entity.getStatus(),
                 entity.getMadeBy().getFirstName() + ' ' + entity.getMadeBy().getLastName().toUpperCase(),
                 entity.getRoom() == null ? null : entity.getRoom().getNumber()
         );

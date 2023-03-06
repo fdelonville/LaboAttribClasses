@@ -12,14 +12,8 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("""
         SELECT r
         FROM Request r
-        WHERE r.date >= now() AND (
-            SELECT s.status
-            FROM Status s
-            WHERE r.id = s.request.id
-            ORDER BY s.createdAt DESC
-            LIMIT 1
-        ) = :status
+        WHERE r.date >= now() AND r.status = :status
         """)
-    List<Request> findFutureWithCurrentStatus(RequestStatus status);
+    List<Request> findFutureWithStatus(RequestStatus status);
 
 }
